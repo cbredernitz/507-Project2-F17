@@ -102,7 +102,7 @@ class Media(object):
     def __repr__(self):
         return "ITUNES MEDIA: {0}".format(self.itunes_id)
 ## - a special len method, which, for the Media class, returns 0 no matter what. (The length of an audiobook might mean something different from the length of a song, depending on how you want to define them!)
-    def itunes_len(self):
+    def len(self):
         return 0
 
 ## - a special contains method (for the in operator) which takes one additional input, as all contains methods must, which should always be a string, and checks to see if the string input to this contains method is INSIDE the string representing the title of this piece of media (the title instance variable)
@@ -133,12 +133,13 @@ print("\n***** PROBLEM 2 *****\n")
 
 class Song(Media):
     def __init__(self, itunes_diction):
+        Media.__init__(self, itunes_diction)
         self.album = itunes_diction['collectionName']
         self.track_number = itunes_diction['trackNumber']
         self.genre = itunes_diction['primaryGenreName']
         self.length = itunes_diction['trackTimeMillis']
 
-    def itunes_len(self):
+    def len(self):
         return (self.length * 60)
 
 
@@ -157,7 +158,7 @@ class Song(Media):
 #
 # class Movie(Media):
 #     def __init__(self, itunes_diction):
-#         self.rating =
+#         self.rating = itunes_diction['']
 #         self.genre =
 #         self.description =
 
