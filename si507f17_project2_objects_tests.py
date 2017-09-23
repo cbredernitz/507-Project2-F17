@@ -38,6 +38,7 @@ class Problem1(unittest.TestCase):
 	def tearDown(self):
 		pass
 
+
 class Problem2Song(unittest.TestCase):
 	def setUp(self):
 		search_data1 = sample_get_cache_itunes_data("the beatles")["results"]
@@ -66,6 +67,7 @@ class Problem2Song(unittest.TestCase):
 
 	def tearDown(self):
 		pass
+
 
 class Problem2Movie(unittest.TestCase):
 	def setUp(self):
@@ -97,6 +99,7 @@ class Problem2Movie(unittest.TestCase):
 
 	def tearDown(self):
 		pass
+
 
 class Problem3(unittest.TestCase):
 	def setUp(self):
@@ -130,5 +133,3 @@ class Problem3(unittest.TestCase):
 
 if __name__ == '__main__':
 	unittest.main(verbosity=2)
-
-
