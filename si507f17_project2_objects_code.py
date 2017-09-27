@@ -3,6 +3,7 @@
 import requests
 import json
 import unittest
+import csv
 
 ## Instructions for each piece to be completed for this project can be found in the file, below.
 
@@ -92,6 +93,10 @@ class Media(object):
         self.author = itunes_diction['artistName']
         self.itunes_URL = itunes_diction['trackViewUrl']
         self.itunes_id = itunes_diction['trackId']
+        if 'trackTimeMillis' in itunes_diction:
+            self.length = itunes_diction['trackTimeMillis']
+        else:
+            self.length = 0
 
 
 ## The Media class should also have the following methods:
@@ -101,9 +106,10 @@ class Media(object):
 ## - a special representation method, which returns "ITUNES MEDIA: <itunes id>" with the iTunes id number for the piece of media (e.g. the track) only in place of "<itunes id>"
     def __repr__(self):
         return "ITUNES MEDIA: {0}".format(self.itunes_id)
+
 ## - a special len method, which, for the Media class, returns 0 no matter what. (The length of an audiobook might mean something different from the length of a song, depending on how you want to define them!)
-    def len(self):
-        return 0
+    def __len__(self):
+        return self.length * 0
 
 ## - a special contains method (for the in operator) which takes one additional input, as all contains methods must, which should always be a string, and checks to see if the string input to this contains method is INSIDE the string representing the title of this piece of media (the title instance variable)
     def __contains__(self, test_string):
@@ -137,10 +143,10 @@ class Song(Media):
         self.album = itunes_diction['collectionName']
         self.track_number = itunes_diction['trackNumber']
         self.genre = itunes_diction['primaryGenreName']
-        self.length = itunes_diction['trackTimeMillis']
 
-    def len(self):
-        return (self.length * 60)
+    def __len__(self):
+        track_len = int(self.length / 1000)
+        return track_len
 
 
 ### class Movie:
@@ -155,12 +161,26 @@ class Song(Media):
 
 ## Should have an additional method called title_words_num that returns an integer representing the number of words in the movie description. If there is no movie description, this method should return 0.
 
-#
-# class Movie(Media):
-#     def __init__(self, itunes_diction):
-#         self.rating = itunes_diction['']
-#         self.genre =
-#         self.description =
+
+class Movie(Media):
+    def __init__(self, itunes_diction):
+        Media.__init__(self, itunes_diction)
+        self.rating = itunes_diction['contentAdvisoryRating']
+        self.genre = itunes_diction['primaryGenreName']
+        if itunes_diction['longDescription'].encode('utf-8') == None:
+            self.description = None
+        else:
+            self.description = itunes_diction['longDescription'].encode('utf-8')
+
+    def __len__(self):
+        return int(((self.length / 1000) / 60))
+
+    def title_words_num(self):
+        if len(self.description) > 0:
+            return len(self.description)
+        else:
+            return 0
+
 
 ## [PROBLEM 3] [150 POINTS]
 print("\n***** PROBLEM 3 *****\n")
@@ -177,7 +197,6 @@ song_samples = sample_get_cache_itunes_data("love","music")["results"]
 
 movie_samples = sample_get_cache_itunes_data("love","movie")["results"]
 
-
 ## You may want to do some investigation on these variables to make sure you understand correctly what type of value they hold, what's in each one!
 
 ## Use the values in these variables above, and the class definitions you've written, in order to create a list of each media type, including "media" generally.
@@ -188,7 +207,18 @@ movie_samples = sample_get_cache_itunes_data("love","movie")["results"]
 
 ## You may use any method of accumulation to make that happen.
 
+media_list = []
+for media in media_samples:
+    media_list.append(Media(media))
 
+
+song_list = []
+for song in song_samples:
+    song_list.append(Song(song))
+
+movie_list = []
+for movie in movie_samples:
+    movie_list.append(Movie(movie))
 
 
 ## [PROBLEM 4] [200 POINTS]
