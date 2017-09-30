@@ -223,11 +223,32 @@ for movie in movie_samples:
 
 ## [PROBLEM 4] [200 POINTS]
 print("\n***** PROBLEM 4 *****\n")
-
 ## Finally, write 3 CSV files:
 # - movies.csv
 # - songs.csv
 # - media.csv
+
+with open('movies.csv', 'w', newline = '') as movies_csv:
+    movie_writter = csv.writer(movies_csv, delimiter=',')
+    movie_writter.writerow(["Title", "Artist", "ID", "URL", "Length"])
+    for movie in movie_list:
+        movie_writter.writerow([movie.title, movie.author, movie.itunes_id, movie.itunes_URL, movie.length])
+movies_csv.close()
+
+with open('songs.csv', 'w', newline = '') as songs_csv:
+    song_writter = csv.writer(songs_csv, delimiter=',')
+    song_writter.writerow(["Title", "Artist", "ID", "URL", "Length"])
+    for song in song_list:
+        song_writter.writerow([song.title, song.author, song.itunes_id, song.itunes_URL, song.length])
+songs_csv.close()
+
+with open('media.csv', 'w', newline = '') as media_csv:
+    media_writter = csv.writer(media_csv, delimiter=',')
+    media_writter.writerow(["Title", "Artist", "ID", "URL", "Length"])
+    for media in media_list:
+        media_writter.writerow([media.title, media.author, media.itunes_id, media.itunes_URL, media.length])
+media_csv.close()
+
 
 ## Each of those CSV files should have 5 columns each:
 # - title
